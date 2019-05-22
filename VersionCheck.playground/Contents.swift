@@ -1,15 +1,10 @@
 import UIKit
 
-var str = "Hello, playground"
-
-
 class CompareVersion: Comparable, Equatable {
 
     var major: Int = 0
     var minor: Int = 0
     var revision: Int = 0
-    
-    var versionString: String = ""
     
     static func < (lhs: CompareVersion, rhs: CompareVersion) -> Bool {
         return lhs.major < rhs.major && lhs.minor < rhs.minor && lhs.revision < rhs.revision
