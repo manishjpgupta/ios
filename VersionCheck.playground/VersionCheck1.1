@@ -1,0 +1,73 @@
+import UIKit
+
+class VersionCheck: NSObject, Comparable {
+    
+    var major: String = "0"
+    var minor: String = "0"
+    var revision: String = "0"
+    
+    static func < (lhs: VersionCheck, rhs: VersionCheck) -> Bool {
+        return lhs.major < rhs.major && lhs.minor < rhs.minor && lhs.revision < rhs.revision
+    }
+    
+    static func == (lhs: VersionCheck, rhs: VersionCheck) -> Bool {
+        return lhs.major == rhs.major && lhs.minor == rhs.minor && lhs.revision == rhs.revision
+    }
+    
+    override init() {
+        super.init()
+    }
+    
+    convenience init(version: String?) {
+        self.init()
+    
+        guard let array = version?.components(separatedBy: "."), array.count <= 3 else {
+            return
+        }
+        
+        let count = array.count
+        switch count {
+        case 3:
+            major = array[0]
+            minor = array[1]
+            revision = array[2]
+        case 2:
+            major = array[0]
+            minor = array[1]
+        case 1:
+            major = array[0]
+        default:break
+        }
+    }
+    
+    static func isNewVersion(version newVersion: VersionCheck,
+                          greaterThan currentVersion: VersionCheck) -> Bool {
+        if currentVersion.major < newVersion.major {
+            return true
+        } else if currentVersion.minor < newVersion.minor {
+            return true
+        } else if currentVersion.revision < newVersion.revision {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    static func isNewVersion(version newVersion: VersionCheck,
+                          equalTo currentVersion: VersionCheck) -> Bool {
+        if currentVersion.major != newVersion.major {
+            return false
+        } else if currentVersion.minor != newVersion.minor {
+            return false
+        } else if currentVersion.revision != newVersion.revision {
+            return false
+        } else {
+            return true
+        }
+    }
+}
+
+VersionCheck.isNewVersion(version: VersionCheck(version: "1.1.1"),
+                       greaterThan: VersionCheck(version: "1.1.1"))
+VersionCheck.isNewVersion(version: VersionCheck(version: "1.1.1"),
+                          equalTo: VersionCheck(version: "1.1.1"))
